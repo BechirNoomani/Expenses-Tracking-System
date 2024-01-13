@@ -1,0 +1,48 @@
+
+<div class="bg-gray-100 p-4">
+
+
+    <form id="incomeForm" th:action="@{/incomes/add}" method="post" th:object="${income}">
+        <label class="block mb-2" for="description">Description:</label>
+        <input class="border p-2 mb-4 w-full" type="text" id="description" name="description" th:field="${income.description}" required>
+
+        <label class="block mb-2" for="amount">Amount:</label>
+        <input class="border p-2 mb-4 w-full" type="number" id="amount" name="amount" th:field="${income.amount}" required>
+
+        <label class="block mb-2" for="date">Date:</label>
+        <input class="border p-2 mb-4 w-full" type="date" id="date" name="date" th:field="${income.date}" th:format="yyyy-MM-dd" required>
+        <input type="hidden" th:field="*{id}"/>
+
+
+        <button class="bg-blue-500 text-white py-2 px-4 rounded w-full mx-auto" type="submit">
+            <span th:text="${income.id == null} ? 'Add Income' : 'Update Income'"></span>
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('incomeForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+
+        var formData = new FormData(this);
+
+
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+
+                window.location.reload();
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    });
+</script>

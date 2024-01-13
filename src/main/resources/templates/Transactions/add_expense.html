@@ -1,0 +1,49 @@
+
+<div class="bg-gray-100 p-4">
+
+
+<form id="expenseForm" th:action="@{/expenses/add}" method="post" th:object="${expense}">
+    <label class="block mb-2" for="description">Description:</label>
+    <input class="border p-2 mb-4 w-full" type="text" id="description" name="description" th:field="${expense.description}" required>
+
+    <label class="block mb-2" for="amount">Amount:</label>
+    <input class="border p-2 mb-4 w-full" type="number" id="amount" name="amount" th:field="${expense.amount}" required>
+
+    <label class="block mb-2" for="date">Date:</label>
+    <input class="border p-2 mb-4 w-full" type="date" id="date" name="date" th:field="${expense.date}" th:format="yyyy-MM-dd" required>
+    <input type="hidden" th:field="*{id}"/>
+
+
+    <button class="bg-blue-500 text-white py-2 px-4 rounded w-full mx-auto" type="submit">
+        <span th:text="${expense.id == null} ? 'Add Expense' : 'Update Expense'"></span>
+    </button>
+</form>
+</div>
+<script>
+    document.getElementById('expenseForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Serialize the form data
+        var formData = new FormData(this);
+
+        // Send an AJAX request
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                // Handle the success response as needed
+                console.log(response);
+
+                // Reload the current page or perform any other action
+                window.location.reload();
+            },
+            error: function (error) {
+                // Handle the error response as needed
+                console.error(error);
+            }
+        });
+    });
+</script>
